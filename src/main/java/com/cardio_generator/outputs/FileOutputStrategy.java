@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * This output strategy creates the base output directory if needed and
  * appends each generated record to the file associated with its label.
  */
-public class FileOutputStrategy implements OutputStrategy {
+public class FileOutputStrategy implements OutputStrategy { // Renamed class to UpperCamelCase 
 
     // Renamed variable to lowerCamelCase 
     private String baseDirectory;
@@ -26,7 +26,7 @@ public class FileOutputStrategy implements OutputStrategy {
      *
      * @param baseDirectory the directory in which output files should be created
      */
-    public FileOutputStrategy(String baseDirectory) {
+    public FileOutputStrategy(String baseDirectory) { // Renamed the constructor to UpperCamelCase to match the class name
 
         // Renamed to lowerCamelCase
         this.baseDirectory = baseDirectory;
