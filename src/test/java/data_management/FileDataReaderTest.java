@@ -15,6 +15,9 @@ import com.data_management.DataStorage;
 import com.data_management.FileDataReader;
 import com.data_management.PatientRecord;
 
+/**
+ * Tests parsing simulator file output into DataStorage records.
+ */
 class FileDataReaderTest {
     @TempDir
     Path tempDirectory;
@@ -88,7 +91,7 @@ class FileDataReaderTest {
 
     @Test
     void testReadDataRejectsNonDirectoryPath() throws IOException {
-        
+
         Path filePath = tempDirectory.resolve("Saturation.txt");
         Files.write(filePath, List.of("Patient ID: 1, Timestamp: 1714376789050, Label: Saturation, Data: 95%"));
 

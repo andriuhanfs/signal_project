@@ -11,6 +11,9 @@ import com.data_management.PatientRecord;
 
 import java.util.List;
 
+/**
+ * Tests the storage and retrieval behavior of the DataStorage repository.
+ */
 class DataStorageTest {
 
     @Test
