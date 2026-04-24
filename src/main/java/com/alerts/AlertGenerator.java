@@ -7,6 +7,7 @@ import java.util.List;
 import com.alerts.strategies.AlertStrategy;
 import com.alerts.strategies.BloodPressureStrategy;
 import com.alerts.strategies.ECGStrategy;
+import com.alerts.strategies.HeartRateStrategy;
 import com.alerts.strategies.HypotensiveHypoxemiaStrategy;
 import com.alerts.strategies.ManualAlertStrategy;
 import com.alerts.strategies.OxygenSaturationStrategy;
@@ -27,6 +28,7 @@ public class AlertGenerator {
                 new OxygenSaturationStrategy(),
                 new HypotensiveHypoxemiaStrategy(),
                 new ECGStrategy(),
+                new HeartRateStrategy(),
                 new ManualAlertStrategy());
     }
 
