@@ -10,7 +10,18 @@ import com.alerts.BasicAlert;
 import com.data_management.Patient;
 import com.data_management.PatientRecord;
 
+/**
+ * Alert strategy for manual alert records emitted by the simulator.
+ */
 public class ManualAlertStrategy implements AlertStrategy {
+
+    /**
+     * Checks the latest manual alert record and returns an alert when it is active.
+     *
+     * @param patient the patient being evaluated
+     * @param records all records available for the patient
+     * @return a manual alert when the latest alert record is triggered
+     */
     @Override
     public List<Alert> checkAlert(Patient patient, List<PatientRecord> records) {
         List<Alert> alerts = new ArrayList<>();

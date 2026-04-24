@@ -10,9 +10,21 @@ import com.alerts.factories.BloodPressureAlertFactory;
 import com.data_management.Patient;
 import com.data_management.PatientRecord;
 
+/**
+ * Alert strategy for blood pressure readings.
+ * It checks critical systolic and diastolic thresholds and three-reading
+ * increasing or decreasing trends.
+ */
 public class BloodPressureStrategy implements AlertStrategy {
     private final BloodPressureAlertFactory factory = new BloodPressureAlertFactory();
 
+    /**
+     * Checks blood pressure records and returns generated alerts.
+     *
+     * @param patient the patient being evaluated
+     * @param records all records available for the patient
+     * @return blood pressure alerts triggered by thresholds or trends
+     */
     @Override
     public List<Alert> checkAlert(Patient patient, List<PatientRecord> records) {
         List<Alert> alerts = new ArrayList<>();
@@ -61,6 +73,7 @@ public class BloodPressureStrategy implements AlertStrategy {
      * @param patient the patient being evaluated
      * @param records records of one measurement type, sorted by timestamp
      * @param condition alert condition text
+     * @param alerts alerts list to append to
      */
     private void checkTrend(Patient patient, List<PatientRecord> records, String condition, List<Alert> alerts) {
         for (int i = 0; i <= records.size() - 3; i++) {

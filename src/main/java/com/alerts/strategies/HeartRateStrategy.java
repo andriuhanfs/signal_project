@@ -12,11 +12,23 @@ import com.alerts.factories.HeartRateAlertFactory;
 import com.data_management.Patient;
 import com.data_management.PatientRecord;
 
+/**
+ * Alert strategy for heart-rate readings.
+ * It creates repeated alerts for low heart rates and high-priority alerts for
+ * high heart rates.
+ */
 public class HeartRateStrategy implements AlertStrategy {
     private static final long REPEAT_INTERVAL_MILLIS = 60000L;
 
     private final HeartRateAlertFactory factory = new HeartRateAlertFactory();
 
+    /**
+     * Checks a patient's heart-rate records and returns generated alerts.
+     *
+     * @param patient the patient being evaluated
+     * @param records all records available for the patient
+     * @return alerts for low or high heart-rate readings
+     */
     @Override
     public List<Alert> checkAlert(Patient patient, List<PatientRecord> records) {
         List<Alert> alerts = new ArrayList<>();

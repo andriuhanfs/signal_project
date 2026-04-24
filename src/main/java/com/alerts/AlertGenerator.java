@@ -15,11 +15,20 @@ import com.data_management.DataStorage;
 import com.data_management.Patient;
 import com.data_management.PatientRecord;
 
+/**
+ * Coordinates alert strategies and stores alerts generated for evaluated
+ * patients.
+ */
 public class AlertGenerator {
     private DataStorage dataStorage;
     private List<Alert> alerts;
     private List<AlertStrategy> strategies;
 
+    /**
+     * Creates an alert generator backed by the given data storage.
+     *
+     * @param dataStorage the patient data repository used by this generator
+     */
     public AlertGenerator(DataStorage dataStorage) {
         this.dataStorage = dataStorage;
         this.alerts = new ArrayList<>();
@@ -32,6 +41,11 @@ public class AlertGenerator {
                 new ManualAlertStrategy());
     }
 
+    /**
+     * Evaluates all configured alert strategies for a patient.
+     *
+     * @param patient the patient whose records should be checked
+     */
     public void evaluateData(Patient patient) {
         List<PatientRecord> records = patient.getRecords(Long.MIN_VALUE, Long.MAX_VALUE);
 
@@ -40,6 +54,11 @@ public class AlertGenerator {
         }
     }
 
+    /**
+     * Returns a copy of all alerts generated so far.
+     *
+     * @return generated alerts
+     */
     public List<Alert> getAlerts() {
         return new ArrayList<>(alerts);
     }

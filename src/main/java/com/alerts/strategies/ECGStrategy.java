@@ -10,9 +10,20 @@ import com.alerts.factories.ECGAlertFactory;
 import com.data_management.Patient;
 import com.data_management.PatientRecord;
 
+/**
+ * Alert strategy for ECG readings.
+ * It detects abnormal ECG peaks compared with the average of recent readings.
+ */
 public class ECGStrategy implements AlertStrategy {
     private final ECGAlertFactory factory = new ECGAlertFactory();
 
+    /**
+     * Checks ECG records and returns generated alerts.
+     *
+     * @param patient the patient being evaluated
+     * @param records all records available for the patient
+     * @return ECG alerts triggered by abnormal peaks
+     */
     @Override
     public List<Alert> checkAlert(Patient patient, List<PatientRecord> records) {
         List<Alert> alerts = new ArrayList<>();

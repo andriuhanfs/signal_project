@@ -10,7 +10,20 @@ import com.alerts.BasicAlert;
 import com.data_management.Patient;
 import com.data_management.PatientRecord;
 
+/**
+ * Alert strategy for the combined hypotensive hypoxemia condition.
+ * It checks whether the latest systolic pressure and oxygen saturation readings
+ * are both below their critical thresholds.
+ */
 public class HypotensiveHypoxemiaStrategy implements AlertStrategy {
+
+    /**
+     * Checks for combined low systolic pressure and low oxygen saturation.
+     *
+     * @param patient the patient being evaluated
+     * @param records all records available for the patient
+     * @return an alert when hypotensive hypoxemia is detected
+     */
     @Override
     public List<Alert> checkAlert(Patient patient, List<PatientRecord> records) {
         List<Alert> alerts = new ArrayList<>();
