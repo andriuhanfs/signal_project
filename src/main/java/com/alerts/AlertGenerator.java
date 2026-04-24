@@ -95,7 +95,7 @@ public class AlertGenerator {
             double value = record.getMeasurementValue();
 
             if (value > 180 || value < 90) {
-                triggerAlert(new Alert(
+                triggerAlert(new BasicAlert(
                         String.valueOf(patient.getPatientId()),
                         "Critical systolic blood pressure",
                         record.getTimestamp()));
@@ -106,7 +106,7 @@ public class AlertGenerator {
             double value = record.getMeasurementValue();
 
             if (value > 120 || value < 60) {
-                triggerAlert(new Alert(
+                triggerAlert(new BasicAlert(
                         String.valueOf(patient.getPatientId()),
                         "Critical diastolic blood pressure",
                         record.getTimestamp()));
@@ -146,7 +146,7 @@ public class AlertGenerator {
             boolean decreasing = change1 < -10 && change2 < -10;
 
             if (increasing || decreasing) {
-                triggerAlert(new Alert(
+                triggerAlert(new BasicAlert(
                         String.valueOf(patient.getPatientId()),
                         condition,
                         third.getTimestamp()));
@@ -169,7 +169,7 @@ public class AlertGenerator {
 
         for (PatientRecord record : saturationRecords) {
             if (record.getMeasurementValue() < 92) {
-                triggerAlert(new Alert(
+                triggerAlert(new BasicAlert(
                         String.valueOf(patient.getPatientId()),
                         "Low oxygen saturation",
                         record.getTimestamp()));
@@ -190,7 +190,7 @@ public class AlertGenerator {
                 double drop = previous.getMeasurementValue() - current.getMeasurementValue();
 
                 if (drop >= 5) {
-                    triggerAlert(new Alert(
+                    triggerAlert(new BasicAlert(
                             String.valueOf(patient.getPatientId()),
                             "Rapid oxygen saturation drop",
                             current.getTimestamp()));
@@ -218,7 +218,7 @@ public class AlertGenerator {
         }
 
         if (latestSystolic.getMeasurementValue() < 90 && latestSaturation.getMeasurementValue() < 92) {
-            triggerAlert(new Alert(
+            triggerAlert(new BasicAlert(
                     String.valueOf(patient.getPatientId()),
                     "Hypotensive hypoxemia",
                     Math.max(latestSystolic.getTimestamp(), latestSaturation.getTimestamp())));
@@ -246,7 +246,7 @@ public class AlertGenerator {
             double currentValue = ecgRecords.get(i).getMeasurementValue();
 
             if (currentValue > average + 0.5) {
-                triggerAlert(new Alert(
+                triggerAlert(new BasicAlert(
                         String.valueOf(patient.getPatientId()),
                         "Abnormal ECG peak",
                         ecgRecords.get(i).getTimestamp()));
@@ -272,7 +272,7 @@ public class AlertGenerator {
         }
 
         if (latestAlert.getMeasurementValue() >= 1.0) {
-            triggerAlert(new Alert(
+            triggerAlert(new BasicAlert(
                     String.valueOf(patient.getPatientId()),
                     "Manual alert triggered",
                     latestAlert.getTimestamp()));
