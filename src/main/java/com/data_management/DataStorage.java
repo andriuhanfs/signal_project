@@ -13,7 +13,18 @@ import com.alerts.AlertGenerator;
  * patient IDs.
  */
 public class DataStorage {
+    private static final DataStorage INSTANCE = new DataStorage();
+
     private final Map<Integer, Patient> patientMap; // Stores patient objects indexed by their unique patient ID.
+
+    /**
+     * Returns the shared DataStorage instance.
+     *
+     * @return the singleton DataStorage instance
+     */
+    public static DataStorage getInstance() {
+        return INSTANCE;
+    }
 
     /**
      * Constructs a new instance of DataStorage, initializing the underlying storage
@@ -39,6 +50,14 @@ public class DataStorage {
     public void addPatientData(int patientId, double measurementValue, String recordType, long timestamp) {
         Patient patient = patientMap.computeIfAbsent(patientId, Patient::new);
         patient.addRecord(measurementValue, recordType, timestamp);
+    }
+
+    /**
+     * Removes all stored patient data.
+     * This is useful for resetting the singleton between tests or simulations.
+     */
+    public void clear() {
+        patientMap.clear();
     }
 
     /**
@@ -81,7 +100,7 @@ public class DataStorage {
     public static void main(String[] args) {
         // DataReader is not defined in this scope, should be initialized appropriately.
         // DataReader reader = new SomeDataReaderImplementation("path/to/data");
-        DataStorage storage = new DataStorage();
+        DataStorage storage = DataStorage.getInstance();
 
         // Assuming the reader has been properly initialized and can read data into the
         // storage

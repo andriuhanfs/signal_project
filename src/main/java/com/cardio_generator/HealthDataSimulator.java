@@ -33,10 +33,19 @@ import java.util.ArrayList;
  */
 public class HealthDataSimulator {
 
+    private static final HealthDataSimulator INSTANCE = new HealthDataSimulator();
+
     private static int patientCount = 50; // Default number of patients
     private static ScheduledExecutorService scheduler;
     private static OutputStrategy outputStrategy = new ConsoleOutputStrategy(); // Default output strategy
     private static final Random random = new Random();
+
+    private HealthDataSimulator() {
+    }
+
+    public static HealthDataSimulator getInstance() {
+        return INSTANCE;
+    }
 
     /**
      * Starts the simulator by parsing command-line arguments, creating the
@@ -48,7 +57,10 @@ public class HealthDataSimulator {
      *     processing the selected output strategy
      */
     public static void main(String[] args) throws IOException {
+        getInstance().run(args);
+    }
 
+    public void run(String[] args) throws IOException {
         parseArguments(args);
 
         scheduler = Executors.newScheduledThreadPool(patientCount * 4);
