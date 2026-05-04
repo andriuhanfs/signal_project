@@ -106,4 +106,36 @@ class DataStorageTest {
 
         assertEquals(1, storage.getAllPatients().size());
     }
+
+    @Test
+    void testDuplicateRecordsAreNotStoredTwice() {
+        DataStorage storage = new DataStorage();
+
+        storage.addPatientData(1, 95.0, "Saturation", 1000L);
+        storage.addPatientData(1, 95.0, "Saturation", 1000L);
+
+        List<PatientRecord> records = storage.getRecords(1, 0L, 2000L);
+
+        assertEquals(1, records.size());
+    }
+
+    @Test
+    void testConcurrentPatientDataUpdates() throws InterruptedException {
+        DataStorage storage = new DataStorage();
+        int threadCount = 10;
+        Thread[] threads = new Thread[threadCount];
+
+        for (int i = 0; i < threadCount; i++) {
+            final int index = i;
+            threads[i] = new Thread(() ->
+                    storage.addPatientData(1, index, "HeartRate", 1000L + index));
+            threads[i].start();
+        }
+
+        for (Thread thread : threads) {
+            thread.join();
+        }
+
+        assertEquals(threadCount, storage.getRecords(1, 0L, Long.MAX_VALUE).size());
+    }
 }

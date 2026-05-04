@@ -47,7 +47,7 @@ public class DataStorage {
      * @param timestamp        the time at which the measurement was taken, in
      *                         milliseconds since the Unix epoch
      */
-    public void addPatientData(int patientId, double measurementValue, String recordType, long timestamp) {
+    public synchronized void addPatientData(int patientId, double measurementValue, String recordType, long timestamp) {
         Patient patient = patientMap.computeIfAbsent(patientId, Patient::new);
         patient.addRecord(measurementValue, recordType, timestamp);
     }
@@ -56,7 +56,7 @@ public class DataStorage {
      * Removes all stored patient data.
      * This is useful for resetting the singleton between tests or simulations.
      */
-    public void clear() {
+    public synchronized void clear() {
         patientMap.clear();
     }
 
@@ -73,7 +73,7 @@ public class DataStorage {
      * @return a list of PatientRecord objects that fall within the specified time
      *         range
      */
-    public List<PatientRecord> getRecords(int patientId, long startTime, long endTime) {
+    public synchronized List<PatientRecord> getRecords(int patientId, long startTime, long endTime) {
         Patient patient = patientMap.get(patientId);
         if (patient != null) {
             return patient.getRecords(startTime, endTime);
@@ -86,7 +86,7 @@ public class DataStorage {
      *
      * @return a list of all patients
      */
-    public List<Patient> getAllPatients() {
+    public synchronized List<Patient> getAllPatients() {
         return new ArrayList<>(patientMap.values());
     }
 

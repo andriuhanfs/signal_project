@@ -64,6 +64,22 @@ java -jar target/cardio_generator-1.0-SNAPSHOT.jar --patient-count 100 --output 
 
 Four UML class diagrams for the CHMS subsystems were added for the Week 2 assignment. They are stored in the [uml_models](uml_models/) directory and cover alert generation, data storage, patient identification, and the data access layer.
 
+## Week 5 WebSocket Streaming
+
+Week 5 adds real-time patient data ingestion through Java-WebSocket. The data access layer now includes a streaming `DataReader`, a WebSocket client that parses and stores incoming patient records, shared parsing for file and WebSocket formats, thread-safe storage updates, and tests covering malformed messages, connection handling, duplicate prevention, concurrent updates, and WebSocket-to-alert integration.
+
+To run the simulator with WebSocket output:
+
+```sh
+java -jar target/cardio_generator-1.0-SNAPSHOT.jar --output websocket:8080
+```
+
+The WebSocket stream emits messages in the same readable format used by file output:
+
+```text
+Patient ID: 1, Timestamp: 1714376789050, Label: Saturation, Data: 95%
+```
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

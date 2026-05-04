@@ -35,7 +35,11 @@ public class Patient {
      * @param timestamp        the time at which the measurement was taken, in
      *                         milliseconds since UNIX epoch
      */
-    public void addRecord(double measurementValue, String recordType, long timestamp) {
+    public synchronized void addRecord(double measurementValue, String recordType, long timestamp) {
+        if (hasRecord(measurementValue, recordType, timestamp)) {
+            return;
+        }
+
         PatientRecord record = new PatientRecord(this.patientId, measurementValue, recordType, timestamp);
         this.patientRecords.add(record);
     }
@@ -58,7 +62,7 @@ public class Patient {
      * @param endTime   the end of the time range, in milliseconds since UNIX epoch
      * @return a list of PatientRecord objects that fall within the specified time range
      */
-    public List<PatientRecord> getRecords(long startTime, long endTime) {
+    public synchronized List<PatientRecord> getRecords(long startTime, long endTime) {
         List<PatientRecord> matchingRecords = new ArrayList<>();
 
         for (PatientRecord record : patientRecords) {
@@ -70,5 +74,19 @@ public class Patient {
         }
 
         return matchingRecords;
+    }
+
+    private boolean hasRecord(double measurementValue, String recordType, long timestamp) {
+        for (PatientRecord record : patientRecords) {
+            boolean sameTimestamp = record.getTimestamp() == timestamp;
+            boolean sameType = record.getRecordType().equals(recordType);
+            boolean sameValue = Double.compare(record.getMeasurementValue(), measurementValue) == 0;
+
+            if (sameTimestamp && sameType && sameValue) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
