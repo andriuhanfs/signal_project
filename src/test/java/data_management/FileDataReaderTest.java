@@ -13,6 +13,7 @@ import org.junit.jupiter.api.io.TempDir;
 
 import com.data_management.DataStorage;
 import com.data_management.FileDataReader;
+import com.data_management.PatientDataParser;
 import com.data_management.PatientRecord;
 
 /**
@@ -62,8 +63,8 @@ class FileDataReaderTest {
         List<PatientRecord> records = storage.getRecords(1, 0L, Long.MAX_VALUE);
 
         assertEquals(2, records.size());
-        assertEquals(FileDataReader.ALERT_TRIGGERED_VALUE, records.get(0).getMeasurementValue());
-        assertEquals(FileDataReader.ALERT_RESOLVED_VALUE, records.get(1).getMeasurementValue());
+        assertEquals(PatientDataParser.ALERT_TRIGGERED_VALUE, records.get(0).getMeasurementValue());
+        assertEquals(PatientDataParser.ALERT_RESOLVED_VALUE, records.get(1).getMeasurementValue());
     }
 
     @Test

@@ -18,12 +18,6 @@ import java.util.stream.Stream;
  */
 public class FileDataReader implements DataReader {
 
-    public static final double ALERT_TRIGGERED_VALUE = 1.0;
-    public static final double ALERT_RESOLVED_VALUE = 0.0;
-
-    private static final Pattern OUTPUT_LINE_PATTERN = Pattern.compile(
-            "^Patient ID:\\s*(\\d+),\\s*Timestamp:\\s*(\\d+),\\s*Label:\\s*([^,]+),\\s*Data:\\s*(.+)$");
-
     private final Path outputDirectory;
 
     /**
@@ -86,43 +80,19 @@ public class FileDataReader implements DataReader {
     }
 
     private void parseLine(String line, Path dataFile, int lineNumber, DataStorage dataStorage) throws IOException {
-
-        Matcher matcher = OUTPUT_LINE_PATTERN.matcher(line.trim());
-
-        if (!matcher.matches()) {
-            throw new IOException("Invalid patient data line in " + dataFile + " at line " + lineNumber + ": " + line);
-        }
-
-        int patientId = Integer.parseInt(matcher.group(1));
-        long timestamp = Long.parseLong(matcher.group(2));
-        String recordType = matcher.group(3).trim();
-        double measurementValue = parseMeasurementValue(matcher.group(4).trim(), dataFile, lineNumber);
-
-        dataStorage.addPatientData(patientId, measurementValue, recordType, timestamp);
-    }
-
-    private double parseMeasurementValue(String rawValue, Path dataFile, int lineNumber) throws IOException {
-        
-        String normalizedValue = rawValue.trim();
-
-        if (normalizedValue.endsWith("%")) {
-            normalizedValue = normalizedValue.substring(0, normalizedValue.length() - 1).trim();
-        }
-
-        if (normalizedValue.equalsIgnoreCase("triggered")) {
-            return ALERT_TRIGGERED_VALUE;
-        }
-
-        if (normalizedValue.equalsIgnoreCase("resolved") || normalizedValue.equalsIgnoreCase("untriggered")) {
-            return ALERT_RESOLVED_VALUE;
-        }
-
         try {
-            return Double.parseDouble(normalizedValue);
-        } catch (NumberFormatException exception) {
+            PatientRecord record = PatientDataParser.parse(line);
+
+            dataStorage.addPatientData(
+                    record.getPatientId(),
+                    record.getMeasurementValue(),
+                    record.getRecordType(),
+                    record.getTimestamp());
+
+        } catch (IOException exception) {
             throw new IOException(
-                    "Invalid numeric value in " + dataFile + " at line " + lineNumber + ": " + rawValue,
-                    exception);
+                    "Invalid patient data line in " + dataFile + " at line " + lineNumber + ": " + line, exception);
         }
     }
+
 }
