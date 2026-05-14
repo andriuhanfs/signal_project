@@ -26,7 +26,8 @@ class WebSocketIntegrationTest {
     @Test
     void testWebSocketReaderStoresStreamedDataAndSupportsAlertGeneration() throws Exception {
         TestWebSocketServer server = new TestWebSocketServer(availablePort());
-        DataStorage storage = new DataStorage();
+        DataStorage storage = DataStorage.getInstance();
+        storage.clear();
         WebSocketDataReader reader = null;
 
         try {

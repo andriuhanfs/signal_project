@@ -18,7 +18,8 @@ class DataStorageTest {
 
     @Test
     void testAddAndGetRecords() {
-        DataStorage storage = new DataStorage();
+        DataStorage storage = DataStorage.getInstance();
+        storage.clear();
 
         storage.addPatientData(1, 100.0, "WhiteBloodCells", 1714376789050L);
         storage.addPatientData(1, 200.0, "WhiteBloodCells", 1714376789051L);
@@ -32,7 +33,8 @@ class DataStorageTest {
 
     @Test
     void testGetRecordsFiltersByTimeRange() {
-        DataStorage storage = new DataStorage();
+        DataStorage storage = DataStorage.getInstance();
+        storage.clear();
 
         storage.addPatientData(1, 100.0, "ECG", 1000L);
         storage.addPatientData(1, 200.0, "ECG", 2000L);
@@ -46,7 +48,8 @@ class DataStorageTest {
 
     @Test
     void testGetRecordsReturnsEmptyListForUnknownPatient() {
-        DataStorage storage = new DataStorage();
+        DataStorage storage = DataStorage.getInstance();
+        storage.clear();
 
         List<PatientRecord> records = storage.getRecords(99, 1000L, 2000L);
 
@@ -55,7 +58,8 @@ class DataStorageTest {
 
     @Test
     void testGetRecordsIncludesStartAndEndTimes() {
-        DataStorage storage = new DataStorage();
+        DataStorage storage = DataStorage.getInstance();
+        storage.clear();
 
         storage.addPatientData(1, 100.0, "Saturation", 1000L);
         storage.addPatientData(1, 200.0, "Saturation", 2000L);
@@ -67,7 +71,8 @@ class DataStorageTest {
 
     @Test
     void testRecordsAreSeparatedByPatient() {
-        DataStorage storage = new DataStorage();
+        DataStorage storage = DataStorage.getInstance();
+        storage.clear();
 
         storage.addPatientData(1, 100.0, "ECG", 1000L);
         storage.addPatientData(2, 200.0, "ECG", 1000L);
@@ -83,7 +88,8 @@ class DataStorageTest {
 
     @Test
     void testGetAllPatientsReturnsStoredPatients() {
-        DataStorage storage = new DataStorage();
+        DataStorage storage = DataStorage.getInstance();
+        storage.clear();
 
         storage.addPatientData(1, 100.0, "ECG", 1000L);
         storage.addPatientData(2, 200.0, "Saturation", 2000L);
@@ -97,7 +103,8 @@ class DataStorageTest {
 
     @Test
     void testGetAllPatientsReturnsCopy() {
-        DataStorage storage = new DataStorage();
+        DataStorage storage = DataStorage.getInstance();
+        storage.clear();
 
         storage.addPatientData(1, 100.0, "ECG", 1000L);
 
@@ -109,7 +116,8 @@ class DataStorageTest {
 
     @Test
     void testDuplicateRecordsAreNotStoredTwice() {
-        DataStorage storage = new DataStorage();
+        DataStorage storage = DataStorage.getInstance();
+        storage.clear();
 
         storage.addPatientData(1, 95.0, "Saturation", 1000L);
         storage.addPatientData(1, 95.0, "Saturation", 1000L);
@@ -121,7 +129,8 @@ class DataStorageTest {
 
     @Test
     void testConcurrentPatientDataUpdates() throws InterruptedException {
-        DataStorage storage = new DataStorage();
+        DataStorage storage = DataStorage.getInstance();
+        storage.clear();
         int threadCount = 10;
         Thread[] threads = new Thread[threadCount];
 

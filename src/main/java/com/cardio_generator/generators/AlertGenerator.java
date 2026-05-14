@@ -11,9 +11,9 @@ import com.cardio_generator.outputs.OutputStrategy;
  */
 public class AlertGenerator implements PatientDataGenerator {
 
-    // Changed to private because this helper field is internal to the class
-    private static final Random randomGenerator = new Random(); 
-    // Renamed to lowerCamelCase
+    // Changed to private because this helper field is internal to the class.
+    private static final Random randomGenerator = new Random();
+    // Renamed to lowerCamelCase.
     private boolean[] alertStates; // false = resolved, true = pressed
 
     /**
@@ -42,7 +42,7 @@ public class AlertGenerator implements PatientDataGenerator {
                     outputStrategy.output(patientId, System.currentTimeMillis(), "Alert", "resolved");
                 }
             } else {
-                // Renamed the variabke to lowerCamelCase
+                // Renamed the variable to lowerCamelCase.
                 double lambda = 0.1; // Average rate (alerts per period), adjust based on desired frequency
                 double p = -Math.expm1(-lambda); // Probability of at least one alert in the period
                 boolean alertTriggered = randomGenerator.nextDouble() < p;

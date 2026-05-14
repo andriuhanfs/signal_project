@@ -27,10 +27,9 @@ public class DataStorage {
     }
 
     /**
-     * Constructs a new instance of DataStorage, initializing the underlying storage
-     * structure.
+     * Constructs the singleton DataStorage instance.
      */
-    public DataStorage() {
+    private DataStorage() {
         this.patientMap = new HashMap<>();
     }
 

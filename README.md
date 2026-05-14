@@ -37,7 +37,7 @@ The Cardio Data Simulator is a Java-based application designed to simulate real-
    ```sh
    mvn clean package
    ```
-   This step compiles the source code and packages the application into an executable JAR file located in the `target/` directory.
+   This step compiles the source code and packages the application into an executable JAR file located in the `target/` directory. The renamed submission JAR is also stored in the `bin/` directory.
 
 ### Running the Simulator
 
@@ -62,7 +62,7 @@ java -jar target/cardio_generator-1.0-SNAPSHOT.jar --patient-count 100 --output 
 
 ## Week 2 UML Modeling
 
-Four UML class diagrams for the CHMS subsystems were added for the Week 2 assignment. They are stored in the [uml_models](uml_models/) directory and cover alert generation, data storage, patient identification, and the data access layer.
+Four UML class diagrams for the CHMS subsystems were added for the Week 2 assignment. They are stored in the [uml_models](uml_models/) directory and cover alert generation, data storage, patient identification, and the data access layer. The same directory includes written design explanations for each model.
 
 ## Week 5 WebSocket Streaming
 

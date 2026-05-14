@@ -39,7 +39,8 @@ class WebSocketDataReaderTest {
     @Test
     void testReadDataFailsClearlyWhenServerUnavailable() {
         WebSocketDataReader reader = new WebSocketDataReader(URI.create("ws://localhost:1"), 1);
-        DataStorage storage = new DataStorage();
+        DataStorage storage = DataStorage.getInstance();
+        storage.clear();
 
         assertThrows(IOException.class, () -> reader.readData(storage));
     }

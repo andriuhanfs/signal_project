@@ -18,7 +18,8 @@ class WebSocketClientTest {
 
     @Test
     void testOnMessageStoresValidReadableMessage() {
-        DataStorage storage = new DataStorage();
+        DataStorage storage = DataStorage.getInstance();
+        storage.clear();
         WebSocketClient client = new WebSocketClient(URI.create("ws://localhost:8080"), storage);
 
         client.onMessage("Patient ID: 1, Timestamp: 1714376789050, Label: Saturation, Data: 95%");
@@ -33,7 +34,8 @@ class WebSocketClientTest {
 
     @Test
     void testOnMessageStoresValidCsvMessage() {
-        DataStorage storage = new DataStorage();
+        DataStorage storage = DataStorage.getInstance();
+        storage.clear();
         WebSocketClient client = new WebSocketClient(URI.create("ws://localhost:8080"), storage);
 
         client.onMessage("2,1714376789051,ECG,0.42");
@@ -47,7 +49,8 @@ class WebSocketClientTest {
 
     @Test
     void testMalformedMessageIsCountedAndDoesNotThrow() {
-        DataStorage storage = new DataStorage();
+        DataStorage storage = DataStorage.getInstance();
+        storage.clear();
         WebSocketClient client = new WebSocketClient(URI.create("ws://localhost:8080"), storage);
 
         client.onMessage("bad-message");
@@ -59,7 +62,8 @@ class WebSocketClientTest {
 
     @Test
     void testOnOpenAndOnCloseRecordConnectionState() {
-        DataStorage storage = new DataStorage();
+        DataStorage storage = DataStorage.getInstance();
+        storage.clear();
         WebSocketClient client = new WebSocketClient(URI.create("ws://localhost:8080"), storage);
 
         client.onOpen(null);
@@ -75,7 +79,8 @@ class WebSocketClientTest {
 
     @Test
     void testOnErrorStoresLastError() {
-        DataStorage storage = new DataStorage();
+        DataStorage storage = DataStorage.getInstance();
+        storage.clear();
         WebSocketClient client = new WebSocketClient(URI.create("ws://localhost:8080"), storage);
         RuntimeException exception = new RuntimeException("network error");
 

@@ -12,12 +12,12 @@ import java.util.concurrent.ConcurrentHashMap;
  * This output strategy creates the base output directory if needed and
  * appends each generated record to the file associated with its label.
  */
-public class FileOutputStrategy implements OutputStrategy { // Renamed class to UpperCamelCase 
+public class FileOutputStrategy implements OutputStrategy { // Renamed class to UpperCamelCase.
 
-    // Renamed variable to lowerCamelCase 
+    // Renamed variable to lowerCamelCase.
     private String baseDirectory;
 
-    // Renamed variable to lowerCamelCase and made it privte because it is internal state of this calss.
+    // Renamed variable to lowerCamelCase and made it private because it is internal state of this class.
     private final ConcurrentHashMap<String, String> fileMap = new ConcurrentHashMap<>();
 
     /**
@@ -26,9 +26,9 @@ public class FileOutputStrategy implements OutputStrategy { // Renamed class to 
      *
      * @param baseDirectory the directory in which output files should be created
      */
-    public FileOutputStrategy(String baseDirectory) { // Renamed the constructor to UpperCamelCase to match the class name
+    public FileOutputStrategy(String baseDirectory) { // Renamed the constructor to UpperCamelCase to match the class name.
 
-        // Renamed to lowerCamelCase
+        // Renamed to lowerCamelCase.
         this.baseDirectory = baseDirectory;
     }
 
@@ -50,7 +50,7 @@ public class FileOutputStrategy implements OutputStrategy { // Renamed class to 
             System.err.println("Error creating base directory: " + e.getMessage());
             return;
         }
-        // Rename to lowerCamelCase to match the corrected variables
+        // Renamed to lowerCamelCase to match the corrected variables.
         String filePath = fileMap.computeIfAbsent(label, k -> Paths.get(baseDirectory, label + ".txt").toString());
 
         // Write the data to the file

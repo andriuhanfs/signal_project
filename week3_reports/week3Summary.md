@@ -58,6 +58,5 @@ The `target/` directory is generated build output, so the HTML report can be reg
 
 ## Not Fully Tested
 
-The TCP and WebSocket output classes weren't tested because they need network connections. I also did not test the real-time scheduling in `HealthDataSimulator`, because that depends on timed background execution.
-
+At the Week 3 stage, the TCP and WebSocket output classes were not tested because they needed network connections. Week 5 later added WebSocket unit and integration tests. I still did not test the real-time scheduling loop in `HealthDataSimulator`, because that depends on timed background execution.
 

@@ -33,7 +33,8 @@ class FileDataReaderTest {
         writeDataFile("ECG.txt",
                 "Patient ID: 1, Timestamp: 1714376789052, Label: ECG, Data: 0.42");
 
-        DataStorage storage = new DataStorage();
+        DataStorage storage = DataStorage.getInstance();
+        storage.clear();
         FileDataReader reader = new FileDataReader(tempDirectory);
 
         reader.readData(storage);
@@ -55,7 +56,8 @@ class FileDataReaderTest {
                 "Patient ID: 1, Timestamp: 1714376789050, Label: Alert, Data: triggered",
                 "Patient ID: 1, Timestamp: 1714376789051, Label: Alert, Data: resolved");
 
-        DataStorage storage = new DataStorage();
+        DataStorage storage = DataStorage.getInstance();
+        storage.clear();
         FileDataReader reader = new FileDataReader(tempDirectory);
 
         reader.readData(storage);
@@ -72,7 +74,8 @@ class FileDataReaderTest {
 
         writeDataFile("Saturation.txt", "Patient 1, Saturation, 95%");
 
-        DataStorage storage = new DataStorage();
+        DataStorage storage = DataStorage.getInstance();
+        storage.clear();
         FileDataReader reader = new FileDataReader(tempDirectory);
 
         assertThrows(IOException.class, () -> reader.readData(storage));
@@ -84,7 +87,8 @@ class FileDataReaderTest {
         writeDataFile("Saturation.txt",
                 "Patient ID: 1, Timestamp: 1714376789050, Label: Saturation, Data: not-a-number");
 
-        DataStorage storage = new DataStorage();
+        DataStorage storage = DataStorage.getInstance();
+        storage.clear();
         FileDataReader reader = new FileDataReader(tempDirectory);
 
         assertThrows(IOException.class, () -> reader.readData(storage));
@@ -96,7 +100,8 @@ class FileDataReaderTest {
         Path filePath = tempDirectory.resolve("Saturation.txt");
         Files.write(filePath, List.of("Patient ID: 1, Timestamp: 1714376789050, Label: Saturation, Data: 95%"));
 
-        DataStorage storage = new DataStorage();
+        DataStorage storage = DataStorage.getInstance();
+        storage.clear();
         FileDataReader reader = new FileDataReader(filePath);
 
         assertThrows(IOException.class, () -> reader.readData(storage));
