@@ -1,9 +1,14 @@
 package com.data_management;
 
+import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import com.alerts.Alert;
 import com.alerts.AlertGenerator;
 
 /**
@@ -90,36 +95,64 @@ public class DataStorage {
     }
 
     /**
-     * The main method for the DataStorage class.
-     * Initializes the system, reads data into storage, and continuously monitors
-     * and evaluates patient data.
+     * The main method for loading simulator file output into storage and evaluating
+     * stored patient records for alerts.
      * 
-     * @param args command line arguments
+     * @param args command-line arguments; pass an output directory path, optionally
+     *             prefixed with {@code file:}, or use {@code --input <directory>}
+     * @throws IOException if the provided output directory cannot be read
      */
-    public static void main(String[] args) {
-        // DataReader is not defined in this scope, should be initialized appropriately.
-        // DataReader reader = new SomeDataReaderImplementation("path/to/data");
+    public static void main(String[] args) throws IOException {
         DataStorage storage = DataStorage.getInstance();
+        storage.clear();
 
-        // Assuming the reader has been properly initialized and can read data into the
-        // storage
-        // reader.readData(storage);
-
-        // Example of using DataStorage to retrieve and print records for a patient
-        List<PatientRecord> records = storage.getRecords(1, 1700000000000L, 1800000000000L);
-        for (PatientRecord record : records) {
-            System.out.println("Record for Patient ID: " + record.getPatientId() +
-                    ", Type: " + record.getRecordType() +
-                    ", Data: " + record.getMeasurementValue() +
-                    ", Timestamp: " + record.getTimestamp());
+        if (args.length == 0) {
+            printUsage();
+            return;
         }
 
-        // Initialize the AlertGenerator with the storage
+        Path outputDirectory = resolveOutputDirectory(args);
+        FileDataReader reader = new FileDataReader(outputDirectory);
+        reader.readData(storage);
+
         AlertGenerator alertGenerator = new AlertGenerator(storage);
 
-        // Evaluate all patients' data to check for conditions that may trigger alerts
         for (Patient patient : storage.getAllPatients()) {
             alertGenerator.evaluateData(patient);
         }
+
+        List<Alert> alerts = alertGenerator.getAlerts();
+        System.out.println("Loaded " + storage.getAllPatients().size() + " patient(s) from " + outputDirectory + ".");
+        System.out.println("Generated " + alerts.size() + " alert(s).");
+
+        for (Alert alert : alerts) {
+            System.out.println("Alert for patient " + alert.getPatientId()
+                    + ": " + alert.getCondition()
+                    + " at " + alert.getTimestamp());
+        }
+    }
+
+    private static Path resolveOutputDirectory(String[] args) throws IOException {
+        String rawPath;
+
+        if (args[0].equalsIgnoreCase("--input") || args[0].equalsIgnoreCase("--output")) {
+            if (args.length < 2) {
+                throw new IOException("Missing output directory after " + args[0]);
+            }
+            rawPath = args[1];
+        } else {
+            rawPath = args[0];
+        }
+
+        if (rawPath.startsWith("file:")) {
+            rawPath = rawPath.substring("file:".length());
+        }
+
+        return Paths.get(rawPath);
+    }
+
+    private static void printUsage() {
+        System.out.println("Usage: java -jar target/cardio_generator-1.0-SNAPSHOT.jar DataStorage <output-directory>");
+        System.out.println("Example: java -jar target/cardio_generator-1.0-SNAPSHOT.jar DataStorage file:./output");
     }
 }

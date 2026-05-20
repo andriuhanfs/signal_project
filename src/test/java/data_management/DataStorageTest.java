@@ -3,18 +3,26 @@ package data_management;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
 
 import com.data_management.DataStorage;
 import com.data_management.Patient;
 import com.data_management.PatientRecord;
 
-import java.util.List;
-
 /**
  * Tests the storage and retrieval behavior of the DataStorage repository.
  */
 class DataStorageTest {
+    @TempDir
+    Path tempDirectory;
 
     @Test
     void testAddAndGetRecords() {
@@ -146,5 +154,28 @@ class DataStorageTest {
         }
 
         assertEquals(threadCount, storage.getRecords(1, 0L, Long.MAX_VALUE).size());
+    }
+
+    @Test
+    void testMainLoadsFileOutputDirectory() throws IOException {
+        Files.write(tempDirectory.resolve("Saturation.txt"), List.of(
+                "Patient ID: 1, Timestamp: 1714376789050, Label: Saturation, Data: 91%"));
+        Files.write(tempDirectory.resolve("SystolicPressure.txt"), List.of(
+                "Patient ID: 1, Timestamp: 1714376789051, Label: SystolicPressure, Data: 89"));
+
+        PrintStream originalOut = System.out;
+
+        try {
+            System.setOut(new PrintStream(new ByteArrayOutputStream()));
+            DataStorage.main(new String[] {"file:" + tempDirectory});
+        } finally {
+            System.setOut(originalOut);
+        }
+
+        List<PatientRecord> records = DataStorage.getInstance().getRecords(1, 0L, Long.MAX_VALUE);
+
+        assertEquals(2, records.size());
+        assertTrue(records.stream().anyMatch(record -> record.getRecordType().equals("Saturation")));
+        assertTrue(records.stream().anyMatch(record -> record.getRecordType().equals("SystolicPressure")));
     }
 }

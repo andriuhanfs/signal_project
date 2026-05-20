@@ -53,6 +53,12 @@ To run with specific options (e.g., to set the patient count and choose an outpu
 java -jar target/cardio_generator-1.0-SNAPSHOT.jar --patient-count 100 --output file:./output
 ```
 
+To load file output into `DataStorage` and evaluate alerts from the command line:
+
+```sh
+java -jar target/cardio_generator-1.0-SNAPSHOT.jar DataStorage file:./output
+```
+
 ### Supported Output Options
 
 - `console`: Directly prints the simulated data to the console.

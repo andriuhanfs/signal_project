@@ -144,6 +144,33 @@ class AlertGeneratorTest {
     }
 
     @Test
+    void testHypotensiveHypoxemiaDoesNotTriggerOutsideTimeWindow() {
+        DataStorage storage = DataStorage.getInstance();
+        storage.clear();
+        storage.addPatientData(1, 89.0, "SystolicPressure", 1000L);
+        storage.addPatientData(1, 91.0, "Saturation", 1000L + 11 * 60 * 1000L);
+
+        AlertGenerator generator = new AlertGenerator(storage);
+        generator.evaluateData(storage.getAllPatients().get(0));
+
+        assertFalse(containsAlert(generator.getAlerts(), "Hypotensive hypoxemia"));
+    }
+
+    @Test
+    void testHypotensiveHypoxemiaUsesLatestReadings() {
+        DataStorage storage = DataStorage.getInstance();
+        storage.clear();
+        storage.addPatientData(1, 89.0, "SystolicPressure", 1000L);
+        storage.addPatientData(1, 95.0, "SystolicPressure", 2000L);
+        storage.addPatientData(1, 91.0, "Saturation", 3000L);
+
+        AlertGenerator generator = new AlertGenerator(storage);
+        generator.evaluateData(storage.getAllPatients().get(0));
+
+        assertFalse(containsAlert(generator.getAlerts(), "Hypotensive hypoxemia"));
+    }
+
+    @Test
     void testAbnormalEcgPeakAlert() {
         DataStorage storage = DataStorage.getInstance();
         storage.clear();

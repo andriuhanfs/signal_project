@@ -4,16 +4,16 @@
 
 The Unit tests were executed successfully with Maven.
 
-Command used:
+Current verification command:
 
 ```sh
-mvn clean test
+mvn clean package
 ```
 
-Result:
+Result on 2026-05-20:
 
 ```text
-Tests run: 31, Failures: 0, Errors: 0, Skipped: 0
+Tests run: 68, Failures: 0, Errors: 0, Skipped: 0
 BUILD SUCCESS
 ```
 
@@ -37,12 +37,22 @@ target/site/jacoco/index.html
 
 The `target/` directory is generated build output, so the HTML report can be regenerated locally with the command above.
 
+Current JaCoCo summary from `target/site/jacoco/jacoco.csv`:
+
+```text
+Instruction coverage: 56.8% (1630/2870)
+Branch coverage: 61.8% (115/186)
+Line coverage: 58.5% (392/670)
+Method coverage: 67.3% (105/156)
+```
+
 ## Tested Areas
 
 - `Patient.getRecords(...)`
 - `DataStorage.addPatientData(...)`
 - `DataStorage.getRecords(...)`
 - `DataStorage.getAllPatients(...)`
+- `DataStorage.main(...)` loading simulator file output through `FileDataReader`
 - `FileDataReader`
 
 - percentage values such as `95%`
@@ -58,5 +68,4 @@ The `target/` directory is generated build output, so the HTML report can be reg
 
 ## Not Fully Tested
 
-At the Week 3 stage, the TCP and WebSocket output classes were not tested because they needed network connections. Week 5 later added WebSocket unit and integration tests. I still did not test the real-time scheduling loop in `HealthDataSimulator`, because that depends on timed background execution.
-
+At the Week 3 stage, the TCP and WebSocket output classes were not tested because they needed network connections. Week 5 later added WebSocket unit and integration tests. The remaining low-coverage areas are mostly real-time simulator scheduling and output classes that require live console, file, TCP, or WebSocket side effects.

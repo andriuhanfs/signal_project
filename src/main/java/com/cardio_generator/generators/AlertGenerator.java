@@ -11,8 +11,8 @@ import com.cardio_generator.outputs.OutputStrategy;
  */
 public class AlertGenerator implements PatientDataGenerator {
 
-    // Changed to private because this helper field is internal to the class.
-    private static final Random randomGenerator = new Random();
+    // Renamed static final field to UPPER_SNAKE_CASE.
+    private static final Random RANDOM_GENERATOR = new Random();
     // Renamed to lowerCamelCase.
     private boolean[] alertStates; // false = resolved, true = pressed
 
@@ -37,7 +37,7 @@ public class AlertGenerator implements PatientDataGenerator {
     public void generate(int patientId, OutputStrategy outputStrategy) {
         try {
             if (alertStates[patientId]) {
-                if (randomGenerator.nextDouble() < 0.9) { // 90% chance to resolve
+                if (RANDOM_GENERATOR.nextDouble() < 0.9) { // 90% chance to resolve
                     alertStates[patientId] = false;
                     outputStrategy.output(patientId, System.currentTimeMillis(), "Alert", "resolved");
                 }
@@ -45,7 +45,7 @@ public class AlertGenerator implements PatientDataGenerator {
                 // Renamed the variable to lowerCamelCase.
                 double lambda = 0.1; // Average rate (alerts per period), adjust based on desired frequency
                 double p = -Math.expm1(-lambda); // Probability of at least one alert in the period
-                boolean alertTriggered = randomGenerator.nextDouble() < p;
+                boolean alertTriggered = RANDOM_GENERATOR.nextDouble() < p;
 
                 if (alertTriggered) {
                     alertStates[patientId] = true;

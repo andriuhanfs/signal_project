@@ -13,12 +13,15 @@ import com.data_management.PatientRecord;
 /**
  * Alert strategy for the combined hypotensive hypoxemia condition.
  * It checks whether the latest systolic pressure and oxygen saturation readings
- * are both below their critical thresholds.
+ * are both below their critical thresholds within a 10-minute window.
  */
 public class HypotensiveHypoxemiaStrategy implements AlertStrategy {
+    private static final long COMBINATION_WINDOW_MILLIS = 10 * 60 * 1000L;
 
     /**
-     * Checks for combined low systolic pressure and low oxygen saturation.
+     * Checks for combined low systolic pressure and low oxygen saturation. The
+     * latest matching readings must be close enough in time to represent the same
+     * clinical episode.
      *
      * @param patient the patient being evaluated
      * @param records all records available for the patient
@@ -35,7 +38,11 @@ public class HypotensiveHypoxemiaStrategy implements AlertStrategy {
             return alerts;
         }
 
-        if (latestSystolic.getMeasurementValue() < 90 && latestSaturation.getMeasurementValue() < 92) {
+        long timeDifference = Math.abs(latestSystolic.getTimestamp() - latestSaturation.getTimestamp());
+
+        if (latestSystolic.getMeasurementValue() < 90
+                && latestSaturation.getMeasurementValue() < 92
+                && timeDifference <= COMBINATION_WINDOW_MILLIS) {
             alerts.add(new BasicAlert(
                     String.valueOf(patient.getPatientId()),
                     "Hypotensive hypoxemia",
